@@ -1,7 +1,10 @@
 import React from "react";
+import './App.css';
+
+import Routes from "./Routes";
 
 const App: React.FC = () => {
-  return <div className="text-red-500">Hello</div>;
+  return <Routes />;
 };
 
 export default App;
