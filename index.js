@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const passport = require('passport');
 require('dotenv').config()
 const app = express();
 
@@ -17,13 +18,14 @@ mongoose.connection.on('error',(err)=>{
     console.log("err connecting",err)
 })
 
+require('./models/project');
+require('./models/user');
+require('./models/submission');
 
-app.get('/api/members',(req,res)=>{
-    res.send("Hello")
-})
+app.use(passport.initialize());
+require("./middlewares/jsonwtStrategy")(passport);
 
-// static foulder
-app.use(express.static(path.join(__dirname,'public')))
+app.use(require('./routes/auth'))
 
 const PORT = process.env.PORT || 5000;
 

@@ -13,7 +13,7 @@ const ProjectSchema = new mongoose.Schema(
     },
     published: {
       type: Boolean,
-      default: False,
+      default: false,
     },
   },
   { timestamps: true }
