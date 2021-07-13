@@ -5,6 +5,7 @@ const ProjectSchema = new mongoose.Schema(
     projectName: {
       type: String,
       required: true,
+      unique: true,
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,

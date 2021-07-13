@@ -7,20 +7,6 @@ const Project = mongoose.model("Project");
 
 const router = express.Router();
 
-router.get(
-  "/allProjects",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    try {
-      const projects = await Project.find({ userId: req.user._id });
-      res.json({ success: true, projects });
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ success: false, err: err.message });
-    }
-  }
-);
-
 router.post(
   "/createProject",
   passport.authenticate("jwt", { session: false }),
@@ -30,9 +16,39 @@ router.post(
         projectName: req.body.projectName,
         userId: req.user._id,
       });
-      const p = await project.save();
+      // if(!Project.findOne({projectName: project.projectName})){
+        const p = await project.save();
+        const submission = new Submission({
+          projectId: p._id,
+          introduction: req.body.introduction,
+          methodology: req.body.methodology,
+          results: req.body.results,
+          discussion: req.body.discussion,
+          conclusion: req.body.conslusion,
+          abstract: req.body.abstract,
+          references: req.body.references,
+          generalWriting: req.body.generalWriting,
+          total: req.body.total,
+        });
+        await submission.save();
+        res.json({ success: true });
+      // } else{
+      //   res.json({success: false, message: "Project already exists"});
+      // }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ success: false, err: err.message });
+    }
+  }
+);
+
+router.post('/createSubmission',passport.authenticate("jwt", { session: false }), async (req, res) => {
+  try{
+    const project = await Project.findById(req.body.projectId);
+    project.catch(err => res.json({error: err.message}));
+    if(project){
       const submission = new Submission({
-        projectId: p._id,
+        projectId: req.body.projectId,
         introduction: req.body.introduction,
         methodology: req.body.methodology,
         results: req.body.results,
@@ -44,7 +60,38 @@ router.post(
         total: req.body.total,
       });
       await submission.save();
-      res.json({ success: true });
+      res.json({ success: true});
+    } else {
+      res.json({success: false, error: "project not found"});
+    }
+    
+  }catch(err) {
+    res.json({success: false, error: err.message});
+  }
+});
+
+router.put("/editProject",passport.authenticate("jwt", { session: false }),async (req, res) => {
+  try{
+    const project = await Project.findById(req.body.id);
+    if(project){
+      project.update({projectName: req.body.projectName, published:req.body.published})
+      await project.save();
+      res.json({success: true});
+    }else{
+      res.json({success: false,error: "Not Found"});
+    }
+  } catch(e){
+    res.status(500).send(e.message);
+  }
+})
+
+router.get(
+  "/allProjects",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const projects = await Project.find({ userId: req.user._id });
+      res.json({ success: true, projects });
     } catch (err) {
       console.log(err);
       res.status(500).json({ success: false, err: err.message });
