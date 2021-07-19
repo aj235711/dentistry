@@ -45,7 +45,7 @@ router.post(
 router.post('/createSubmission',passport.authenticate("jwt", { session: false }), async (req, res) => {
   try{
     const project = await Project.findById(req.body.projectId);
-    project.catch(err => res.json({error: err.message}));
+    // project.catch(err => res.json({error: err.message}));
     if(project){
       const submission = new Submission({
         projectId: req.body.projectId,
@@ -71,18 +71,46 @@ router.post('/createSubmission',passport.authenticate("jwt", { session: false })
 });
 
 router.put("/editProject",passport.authenticate("jwt", { session: false }),async (req, res) => {
-  try{
-    const project = await Project.findById(req.body.id);
-    if(project){
-      project.update({projectName: req.body.projectName, published:req.body.published})
-      await project.save();
-      res.json({success: true});
-    }else{
-      res.json({success: false,error: "Not Found"});
+    // const project = await Project.findById(req.body.id);
+  Project.updateOne({_id: req.body.id},{projectName: req.body.projectName, published:req.body.published},async (err, numAffected) => {
+    if(err){
+      console.log(err);
+      res.json({success: false});
     }
-  } catch(e){
-    res.status(500).send(e.message);
+  })
+  // await project.save();
+  res.json({success: true});
+})
+
+router.delete("/delete/submission",passport.authenticate("jwt", { session: false}),async (req,res) =>{
+  Submission.deleteOne({_id: req.query.id},err =>{
+    if(err){
+      console.log(err);
+      res.json({success: false});
+    }
+  });
+  res.json({success: true});
+})
+
+router.delete("/delete/project",passport.authenticate("jwt", { session: false }),async (req, res)=>{
+  const project = await Project.findOne({_id: req.query.id});
+  if(project){
+    Submission.deleteMany({projectId:req.query.id},err => {
+      if(err){
+        console.log(err);
+        res.json({success: false});
+      }
+    })
+    Project.deleteOne({_id: req.query.id},err => {
+      if(err){
+        console.log(err);
+        res.json({success: false});
+      }
+    })
+  }else{
+    res.json({success:false, message: "no such project"});
   }
+  res.json({success: true});
 })
 
 router.get(

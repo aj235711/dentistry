@@ -25,8 +25,10 @@ const sendOtp = async (toEmail, otp, res) => {
       service: "gmail",
       host: "smtp.gmail.com",
       auth: {
-        user: "travisScottindia@gmail.com",
-        pass: "travis!@#",
+        // user: "travisScottindia@gmail.com",
+        // pass: "travis!@#",
+        user: "qwertyforgiveme@gmail.com",
+        pass: "donotshareme@1234",
       },
     })
   );
@@ -34,7 +36,7 @@ const sendOtp = async (toEmail, otp, res) => {
     subject = "OTP for Dentistry",
     message = otp;
   const mailOptions = {
-    from: "travisScottindia@gmail.com",
+    from: "qwertyforgiveme@gmail.com",
     to: to,
     subject: subject,
     html: message,
