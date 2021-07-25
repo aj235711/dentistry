@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const cors = require("cors");
 const mongoose = require("mongoose");
 const passport = require("passport");
 require("dotenv").config();
@@ -17,6 +18,8 @@ mongoose.connection.on("connected", () => {
 mongoose.connection.on("error", (err) => {
   console.log("err connecting", err);
 });
+
+app.use(cors());
 
 require("./models/project");
 require("./models/user");
