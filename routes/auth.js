@@ -25,10 +25,10 @@ const sendOtp = async (toEmail, otp, res) => {
       service: "gmail",
       host: "smtp.gmail.com",
       auth: {
-        // user: "travisScottindia@gmail.com",
-        // pass: "travis!@#",
-        user: "qwertyforgiveme@gmail.com",
-        pass: "donotshareme@1234",
+        user: "travisScottindia@gmail.com",
+        pass: "travis!@#",
+        // user: "qwertyforgiveme@gmail.com",
+        // pass: "donotshareme@1234",
       },
     })
   );
@@ -36,7 +36,7 @@ const sendOtp = async (toEmail, otp, res) => {
     subject = "OTP for Dentistry",
     message = otp;
   const mailOptions = {
-    from: "qwertyforgiveme@gmail.com",
+    from: "travisScottindia@gmail.com",
     to: to,
     subject: subject,
     html: message,
@@ -68,12 +68,12 @@ router.post("/signup", async (req, res) => {
           newUser.password = hash;
           newUser
             .save()
-            .then(() => res.status(200).send("User Created"))
+            .then(() => res.json({ success: true, msg: "User Created" }))
             .catch((er) => console.log("error: ", er.message));
         }
       });
     } else {
-      res.send("User already exist");
+      res.json({ success: false, msg: "User already exists" });
     }
   } catch (err) {
     console.log(err.message);

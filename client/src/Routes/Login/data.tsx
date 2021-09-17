@@ -1,7 +1,6 @@
 import * as React from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { toast } from "react-toastify";
 
 import { serverLink } from "../../utils/serverLink";
 
@@ -13,22 +12,15 @@ const useData = () => {
     loading,
   };
 
-  const handleSubmit = async (values: {
-    name: string;
-    email: string;
-    password: string;
-  }) => {
+  const handleSubmit = async (values: { email: string; password: string }) => {
     setLoading(true);
     try {
-      const { data } = await axios.post<{ success: boolean; msg: string }>(
-        `${serverLink}/signup`,
-        values
-      );
-      if (data.success) setLoading(false);
+      const { data } = await axios.post(`${serverLink}/login`, values);
+      console.log(data);
+      setLoading(false);
       history.push("/");
     } catch (err) {
       console.log(err);
-      toast.error("Something went wrong");
       setLoading(false);
     }
   };

@@ -29,12 +29,14 @@ const Button: React.FC<IProps> = ({
   return (
     <button
       type={type}
-      className={`${
-        outline && `border border-${bgch}`
-      } bg-${bgc} text-${color} ${
+      className={`${outline && `border border-${bgch}`} bg-${
+        disabled || loading ? "gray-200" : bgc
+      } text-${color} ${
         rounded && `rounded-${rounded}`
       } px-4 py-2 transition duration-200 ease select-none ${
-        !disabled && !loading && `hover:text-white hover:bg-${bgch}`
+        !disabled &&
+        !loading &&
+        `hover:text-white hover:bg-${disabled || loading ? "gray-200" : bgch}`
       } focus:outline-none focus:shadow-outline ${
         (disabled || loading) && "cursor-auto text-opacity-75"
       } ${classes}`}
