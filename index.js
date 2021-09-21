@@ -30,6 +30,7 @@ require("./middlewares/jsonwtStrategy")(passport);
 
 app.use(require("./routes/auth"));
 app.use(require("./routes/profile"));
+// app.use(require("./routes/admin"));
 
 const PORT = process.env.PORT || 5000;
 
