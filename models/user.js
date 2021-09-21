@@ -17,6 +17,10 @@ const UserSchema = new mongoose.Schema({
   otp: {
     type: String,
   },
+  isAdmin:{
+    type : Boolean,
+    defaule: false,
+  },
 });
 
 module.exports = mongoose.model("User", UserSchema);
