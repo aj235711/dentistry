@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import RegisterForm from "./Register";
 import LoginForm from "./Login";
+import Otp from "./Otp";
 
 const Routes: React.FC = () => {
   return (
@@ -12,6 +13,7 @@ const Routes: React.FC = () => {
       <Switch>
         <Route path="/signup" exact component={RegisterForm} />
         <Route path="/login" exact component={LoginForm} />
+        <Route path="/otp" exact component={Otp} />
       </Switch>
     </Router>
   );

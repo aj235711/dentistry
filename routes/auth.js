@@ -95,6 +95,7 @@ router.post("/login", async (req, res) => {
           async (err, result) => {
             if (err) {
               console.log("error: ", err.message);
+              res.status(500).json("An error occured");
             } else if (result === true) {
               const otp = createOtp();
               profile.otp = otp;

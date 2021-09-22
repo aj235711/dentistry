@@ -4,6 +4,7 @@ interface IProps {
   bgc?: string;
   bgch?: string;
   color?: string;
+  colorh?: string;
   outline?: boolean;
   disabled?: boolean;
   loading?: boolean;
@@ -15,12 +16,13 @@ interface IProps {
 
 const Button: React.FC<IProps> = ({
   bgc = "white",
-  bgch = "gray-700",
+  bgch = "gray-800",
   color = "gray-700",
+  colorh = "white",
   outline = true,
   disabled = false,
   loading = false,
-  rounded = false,
+  rounded = "none",
   children = "Save",
   type = "button",
   onClick,
@@ -36,7 +38,9 @@ const Button: React.FC<IProps> = ({
       } px-4 py-2 transition duration-200 ease select-none ${
         !disabled &&
         !loading &&
-        `hover:text-white hover:bg-${disabled || loading ? "gray-200" : bgch}`
+        `hover:text-${colorh} hover:bg-${
+          disabled || loading ? "gray-200" : bgch
+        }`
       } focus:outline-none focus:shadow-outline ${
         (disabled || loading) && "cursor-auto text-opacity-75"
       } ${classes}`}
