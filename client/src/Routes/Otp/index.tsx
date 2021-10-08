@@ -1,12 +1,18 @@
 import * as React from "react";
 import OtpInput from "react-otp-input";
+import { connect } from "react-redux";
 
 import Button from "../../Components/Button";
 import useData from "./data";
+import { login as loginAction } from "../../Store/Actions/UserActions";
 
-const LoginForm: React.FC = () => {
-  const { state, handleSubmit, setOtp } = useData();
-  const { loading, otp } = state;
+type mapDispatchProps = ReturnType<typeof mapDispatchToProps>;
+
+type IProps = mapDispatchProps;
+
+const LoginForm: React.FC<IProps> = ({ login }) => {
+  const { state, handleSubmit, setOtp, resend } = useData({ login });
+  const { loading, otp, resendLoading } = state;
 
   return (
     <div className="h-screen w-screen flex justify-center content-center items-center bg-gray-50">
@@ -37,10 +43,24 @@ const LoginForm: React.FC = () => {
             errorStyle={{ border: "1px solid red" }}
           />
           <h6>OTP sent to number 8279416505</h6>
-          <Button classes="py-0 px-9 mt-3 w-full" rounded="3xl">
+          <Button
+            classes="py-0 px-9 mt-3 w-full"
+            rounded="3xl"
+            loading={loading}
+            onClick={handleSubmit}
+            disabled={resendLoading}
+          >
             Submit
           </Button>
-          <Button outline={false} classes="mt-1" bgch="white" colorh="gray-700">
+          <Button
+            outline={false}
+            classes="mt-1"
+            bgch="white"
+            colorh="gray-700"
+            loading={resendLoading}
+            disabled={loading}
+            onClick={resend}
+          >
             Resend OTP
           </Button>
         </div>
@@ -49,4 +69,8 @@ const LoginForm: React.FC = () => {
   );
 };
 
-export default LoginForm;
+const mapDispatchToProps = (dispatch: any) => ({
+  login: (token: string) => dispatch(loginAction(token)),
+});
+
+export default connect(null, mapDispatchToProps)(LoginForm);

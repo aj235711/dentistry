@@ -26,7 +26,7 @@ const sendOtp = async (toEmail, otp, res) => {
       host: "smtp.gmail.com",
       auth: {
         user: process.env.mail1,
-        pass: process.env.mail1,
+        pass: process.env.pass1,
       },
     })
   );
@@ -42,7 +42,7 @@ const sendOtp = async (toEmail, otp, res) => {
   return transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
-      res.status(500).json("unexpected error");
+      res.json({ success: false, statusCode: 2 });
     } else {
       console.log("Email sent: " + info.response);
       res.json({ success: true });
@@ -62,6 +62,7 @@ router.post("/signup", async (req, res) => {
       bcrypt.hash(newUser.password, saltrounds, (err, hash) => {
         if (err) {
           console.log("error:", err.message);
+          res.json({ success: false, statusCode: 1 });
         } else {
           newUser.password = hash;
           newUser
@@ -71,7 +72,7 @@ router.post("/signup", async (req, res) => {
         }
       });
     } else {
-      res.json({ success: false, msg: "User already exists" });
+      res.json({ success: false, statusCode: 0 });
     }
   } catch (err) {
     console.log(err.message);
@@ -87,7 +88,7 @@ router.post("/login", async (req, res) => {
   User.findOne({ email: newUser.email })
     .then((profile) => {
       if (!profile) {
-        res.send("User not Found");
+        res.json({ success: false, statusCode: 0 });
       } else {
         bcrypt.compare(
           newUser.password,
@@ -95,14 +96,14 @@ router.post("/login", async (req, res) => {
           async (err, result) => {
             if (err) {
               console.log("error: ", err.message);
-              res.status(500).json("An error occured");
+              res.json({ success: false, statusCode: 1 });
             } else if (result === true) {
               const otp = createOtp();
               profile.otp = otp;
               await profile.save();
               await sendOtp(req.body.email, otp, res);
             } else {
-              res.send("User Unauthorized");
+              res.json({ success: false, statusCode: 1 });
             }
           }
         );
