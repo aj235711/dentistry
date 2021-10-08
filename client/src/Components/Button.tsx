@@ -1,5 +1,9 @@
 import * as React from "react";
 
+// bgc: backgroundColor
+// bgch: backgroundColor on hover
+// ...and so on
+
 interface IProps {
   bgc?: string;
   bgch?: string;

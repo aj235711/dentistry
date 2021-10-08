@@ -20,12 +20,34 @@ const useData = () => {
   }) => {
     setLoading(true);
     try {
-      const { data } = await axios.post<{ success: boolean; msg: string }>(
-        `${serverLink}/signup`,
-        values
-      );
-      if (data.success) setLoading(false);
-      history.push("/");
+      const { data } = await axios.post(`${serverLink}/signup`, values);
+      if (!data.success) {
+        setLoading(false);
+        const { statusCode } = data;
+        if (!statusCode) {
+          toast.error("User already exists");
+        } else {
+          toast.error("An unexpected error occured");
+        }
+        return;
+      }
+      try {
+        const { data } = await axios.post(`${serverLink}/login`, values);
+        if (!data.success) {
+          toast.error("An unexpected error occured");
+          setLoading(false);
+          return;
+        } else {
+          history.push("/otp", {
+            email: values.email,
+            password: values.password,
+          });
+          setLoading(false);
+        }
+      } catch (err) {
+        console.log(err);
+        toast.error("Something went wrong");
+      }
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong");
