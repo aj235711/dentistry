@@ -23,14 +23,13 @@ app.use(cors());
 
 require("./models/project");
 require("./models/user");
+require("./models/category");
+require("./models/question");
 require("./models/submission");
-
-app.use(passport.initialize());
-require("./middlewares/jsonwtStrategy")(passport);
 
 app.use(require("./routes/auth"));
 app.use(require("./routes/profile"));
-// app.use(require("./routes/admin"));
+app.use(require("./routes/admin"));
 
 const PORT = process.env.PORT || 5000;
 

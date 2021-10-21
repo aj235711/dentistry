@@ -54,7 +54,7 @@ const LoginForm: React.FC<IProps> = ({ login }) => {
           </Button>
           <Button
             outline={false}
-            classes="mt-1"
+            classes="mt-1 px-3 py-1"
             bgch="white"
             colorh="gray-700"
             loading={resendLoading}
