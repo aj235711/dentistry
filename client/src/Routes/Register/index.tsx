@@ -127,7 +127,7 @@ const RegisterForm: React.FC = () => {
                   ) : null}
                 </div>
                 <div className="my-8 grid grid-cols-1 text-center">
-                  <Button type="submit" loading={loading}>
+                  <Button classes="px-3 py-1" type="submit" loading={loading}>
                     Submit
                   </Button>
                 </div>

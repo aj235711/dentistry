@@ -2,7 +2,7 @@ import React from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
-import jwt_decode from "jwt-decode";
+import { Scrollbars } from "react-custom-scrollbars";
 
 import "./App.css";
 import Routes from "./Routes";
@@ -16,20 +16,22 @@ if (localStorage.getItem("jwtToken")) {
 const App: React.FC = () => {
   return (
     <>
-      <Provider store={store}>
-        <Routes />
-        <ToastContainer
-          position="bottom-left"
-          autoClose={1000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-      </Provider>
+      <Scrollbars autoHide style={{ height: "100vh", width: "100vw" }}>
+        <Provider store={store}>
+          <Routes />
+          <ToastContainer
+            position="bottom-left"
+            autoClose={1000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+        </Provider>
+      </Scrollbars>
     </>
   );
 };

@@ -35,11 +35,11 @@ const Button: React.FC<IProps> = ({
   return (
     <button
       type={type}
-      className={`${outline && `border border-${bgch}`} bg-${
-        disabled || loading ? "gray-200" : bgc
-      } text-${color} ${
+      className={`transition ease-in-out duration-500 ${
+        outline && `border border-${bgch}`
+      } bg-${disabled || loading ? "gray-200" : bgc} text-${color} ${
         rounded && `rounded-${rounded}`
-      } px-4 py-2 transition duration-200 ease select-none ${
+      } transition duration-200 ease select-none ${
         !disabled &&
         !loading &&
         `hover:text-${colorh} hover:bg-${

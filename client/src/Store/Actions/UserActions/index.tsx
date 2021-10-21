@@ -19,6 +19,7 @@ export const login = (token: string) => {
   return (dispatch: dispatchType) => {
     localStorage.setItem("jwtToken", token);
     const user: IUser = jwt_decode(token);
+    user.isAdmin = ["amirjaved68504@gmail.com"].includes(user.email);
     dispatch({
       type: "SET_USER",
       payload: user,

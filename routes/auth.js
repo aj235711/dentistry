@@ -117,14 +117,14 @@ router.post("/verifyOtp", async (req, res) => {
   if (user) {
     if (req.body.otp === user.otp) {
       const payload = {
-        id: user._id,
+        _id: user._id,
         email: user.email,
         name: user.name,
       };
       jsonwt.sign(
         payload,
         process.env.secretKey,
-        { expiresIn: 3600 * 24 },
+        { expiresIn: 3600000000 },
         async (err, token) => {
           if (err) {
             console.log("error: ", err.message);

@@ -1,12 +1,5 @@
 import * as React from "react";
-import {
-  Formik,
-  FormikHelpers,
-  FormikProps,
-  Form,
-  Field,
-  FieldProps,
-} from "formik";
+import { Formik, Form, Field } from "formik";
 
 import Button from "../../Components/Button";
 import useData from "./data";
@@ -67,7 +60,7 @@ const LoginForm: React.FC = () => {
                 />
               </div>
               <div className="my-8 grid grid-cols-1 text-center">
-                <Button type="submit" loading={loading}>
+                <Button classes="px-3 py-1" type="submit" loading={loading}>
                   Submit
                 </Button>
               </div>
