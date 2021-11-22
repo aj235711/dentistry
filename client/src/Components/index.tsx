@@ -5,6 +5,7 @@ import ModalFooter from "./ModalFooter";
 import ModalBody from "./ModalBody";
 import Navbar from "./Navbar";
 import Placeholder from "./Placeholder";
+import NotFound from "./NotFound";
 
 export {
   Button,
@@ -14,4 +15,5 @@ export {
   ModalBody,
   ModalFooter,
   ModalHeader,
+  NotFound,
 };
