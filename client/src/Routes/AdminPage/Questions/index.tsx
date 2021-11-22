@@ -3,8 +3,8 @@ import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 import { Button, Placeholder } from "../../../Components";
-import AddCategoryModal from "./Components/AddCategoryModal";
-import DeleteCategoryModal from "./Components/DeleteCategoryModal";
+import AddCategoryModal from "./Components/AddQuestionModal";
+import DeleteCategoryModal from "./Components/DeleteQuestionModal";
 import Card from "./Components/Card";
 import useData from "./data";
 

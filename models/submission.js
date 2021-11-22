@@ -13,11 +13,9 @@ const SubmissionSchema = new mongoose.Schema(
           ref: "Question",
         },
         response: {
-          type: Number,
+          type: String,
           required: true,
-          min: -1,
-          max: 1,
-          default: 0,
+          default: "NA",
         },
       },
     ],

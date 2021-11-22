@@ -7,12 +7,14 @@ import LoginForm from "./Login";
 import Categories from "./AdminPage/Categories";
 import Questions from "./AdminPage/Questions";
 import Otp from "./Otp";
+import SubmissionForm from "./SubmissionForm";
+import { NotFound } from "../Components";
 
 const Routes: React.FC = () => {
   return (
     <Router>
       <Route
-        path={["/", "/categories", "/questions"]}
+        path={["/", "/categories", "/questions", "/make_submission"]}
         exact
         component={Navbar}
       />
@@ -22,6 +24,8 @@ const Routes: React.FC = () => {
         <Route path="/otp" exact component={Otp} />
         <Route path="/categories" exact component={Categories} />
         <Route path="/questions" exact component={Questions} />
+        <Route path="/make_submission" exact component={SubmissionForm} />
+        <Route exact path="*" component={NotFound} />
       </Switch>
     </Router>
   );

@@ -24,7 +24,7 @@ const DeleteCategoryModal: React.FC<IProps> = ({
 }) => {
   const { loading, deleteQuestion } = useData({ _id, toggle, onDone });
   return (
-    <Modal>
+    <Modal classes="w-5/6 md:w-auto" toggle={toggle}>
       <ModalBody classes="flex flex-wrap justify-center items-center bg-white rounded-md">
         <p className="p-3 w-full text-center">
           Are you sure you want to delete this category?

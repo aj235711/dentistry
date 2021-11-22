@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 require("dotenv").config();
 const app = express();
+mongoose.Schema.Types.String.set("trim", true);
+mongoose.set("debug", process.env.NODE_ENV !== "production");
 
 mongoose.connect(process.env.URI, {
   useNewUrlParser: true,

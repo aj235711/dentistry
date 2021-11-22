@@ -15,7 +15,7 @@ const Modal: React.FC<IProps> = ({
   return (
     <>
       <div
-        className="main-modal flex justify-center items-center bg-gray-800 antialiased bg-opacity-20"
+        className="main-modal flex justify-center items-center bg-black antialiased bg-opacity-40"
         style={{
           position: "fixed",
           top: 0,
