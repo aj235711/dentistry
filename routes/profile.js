@@ -67,11 +67,25 @@ router.post(
   }
 );
 
+router.put("editSubmission", passport.authenticate("jwt",{session:false}),
+async (req, res) => {
+  Submission.updateOne(
+    { _id:req.body.id},
+    {questions:req.query.questions},
+    async (err, numAffected) => {
+      if(err){
+        console.log(err);
+        res.json({success: false});
+      }
+    }
+  );
+  res.json({success: true});
+})
+
 router.put(
   "/editProject",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    // const project = await Project.findById(req.body.id);
     Project.updateOne(
       { _id: req.body.id },
       { projectName: req.body.projectName, published: req.body.published },
