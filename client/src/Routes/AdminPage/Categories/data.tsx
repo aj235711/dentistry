@@ -37,15 +37,11 @@ const useData = () => {
   const getCategories = async () => {
     setCategoriesLoading(true);
     try {
-      const { data } = await axios.post(
-        `${serverLink}/getCategories`,
-        {},
-        {
-          headers: {
-            Authorization: localStorage.getItem("jwtToken"),
-          },
-        }
-      );
+      const { data } = await axios.get(`${serverLink}/getCategories`, {
+        headers: {
+          Authorization: localStorage.getItem("jwtToken"),
+        },
+      });
       setCategories(data.categories);
     } catch (err) {
       console.log(err);
