@@ -1,6 +1,9 @@
+import { IUser } from "./user";
+
 export interface ICategory {
   name: string;
-  weightage: number;
+  displayOrder: number;
+  showNa: string;
   description?: string;
   _id?: string;
 }
@@ -8,7 +11,24 @@ export interface ICategory {
 export interface IQuestion {
   category: string | ICategory;
   text: string;
-  weightage: number;
   _id: string;
   isDeleted?: boolean;
+}
+
+export interface IQns {
+  questionId: string;
+  response: string;
+}
+
+export interface IProject {
+  name: string;
+  submissions: string[];
+  userId?: IUser;
+  published?: boolean;
+}
+
+export interface ISubmission {
+  questions: IQns[];
+  createdAt?: Date;
+  projectId?: IProject | string;
 }

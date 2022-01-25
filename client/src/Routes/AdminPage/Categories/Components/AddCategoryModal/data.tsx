@@ -21,17 +21,22 @@ const useData = ({ onDone, toggle, currDescription, _id }: IParams) => {
     description,
   };
 
-  const handleSubmit = async (values: { name: string; weightage: number }) => {
-    const { name, weightage } = values;
+  const handleSubmit = async (values: {
+    name: string;
+    showNa: string;
+    displayOrder: number;
+  }) => {
+    const { name, showNa, displayOrder } = values;
     setSaveCategoryLoading(true);
     try {
       await axios.post(
         `${serverLink}/${_id ? "editCategory" : "addCategory"}`,
         {
           name,
-          weightage,
           description,
           _id,
+          showNa,
+          displayOrder,
         },
         {
           headers: {

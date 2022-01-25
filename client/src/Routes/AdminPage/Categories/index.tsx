@@ -1,6 +1,4 @@
 import * as React from "react";
-import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
-import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 import { Button, Placeholder } from "../../../Components";
 import AddCategoryModal from "./Components/AddCategoryModal";
@@ -57,9 +55,6 @@ const Categories: React.FC = () => {
                     Description
                   </th>
                   <th className="bg-gray-900 p-2 text-white md:border md:border-gray-700 text-left block md:table-cell">
-                    Weightage
-                  </th>
-                  <th className="bg-gray-900 p-2 text-white md:border md:border-gray-700 text-left block md:table-cell">
                     Actions
                   </th>
                 </tr>
@@ -82,12 +77,6 @@ const Categories: React.FC = () => {
                         Description
                       </span>
                       {category.description || "-"}
-                    </td>
-                    <td className="p-2 md:border  text-left block md:table-cell">
-                      <span className="inline-block w-1/3 md:hidden font-bold">
-                        Weightage
-                      </span>
-                      {category.weightage}
                     </td>
                     <td className="p-2 md:border  text-left block md:table-cell">
                       <span className="inline-block w-1/3 md:hidden font-bold">

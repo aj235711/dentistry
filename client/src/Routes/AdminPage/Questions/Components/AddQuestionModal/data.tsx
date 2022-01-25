@@ -22,14 +22,12 @@ const useData = ({ onDone, toggle, currText, _id, categoryId }: IParams) => {
     text,
   };
 
-  const handleSubmit = async (values: { weightage: number }) => {
-    const { weightage } = values;
+  const handleSubmit = async () => {
     setSaveQuestionLoading(true);
     try {
       await axios.post(
         `${serverLink}/${_id ? "editQuestion" : "addQuestion"}`,
         {
-          weightage,
           text,
           _id,
           category: categoryId,

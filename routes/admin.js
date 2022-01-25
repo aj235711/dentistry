@@ -1,18 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const User = mongoose.model("User");
 const Category = mongoose.model("Category");
 const Question = mongoose.model("Question");
-const bcrypt = require("bcrypt");
-const passport = require("passport");
 const authentication = require("../middlewares/authentication");
 
 const router = express.Router();
 
-router.post("/getCategories", authentication, async (req, res) => {
+router.get("/getCategories", authentication, async (req, res) => {
   console.log(req.user);
   try {
-    const categories = await Category.find().sort("name");
+    const categories = await Category.find().sort("displayOrder");
     res.json({ categories });
   } catch (err) {
     console.log(err);
@@ -22,11 +19,13 @@ router.post("/getCategories", authentication, async (req, res) => {
 
 router.post("/addCategory", authentication, async (req, res) => {
   try {
-    const { name, description, weightage } = req.body;
+    const { name, description, weightage, showNa, displayOrder } = req.body;
     const newCategory = new Category({
       name,
       description,
       weightage,
+      showNa,
+      displayOrder,
     });
     await newCategory.save();
     res.json({ success: true });
@@ -38,11 +37,14 @@ router.post("/addCategory", authentication, async (req, res) => {
 
 router.post("/editCategory", authentication, async (req, res) => {
   try {
-    const { name, description, weightage, _id } = req.body;
+    const { name, description, weightage, _id, showNa, displayOrder } =
+      req.body;
     await Category.findByIdAndUpdate(_id, {
       name,
       description,
       weightage,
+      showNa,
+      displayOrder,
     });
     res.json({ success: true });
   } catch (err) {
@@ -62,7 +64,7 @@ router.post("/deleteCategory", authentication, async (req, res) => {
   }
 });
 
-router.post("/getQuestions", authentication, async (req, res) => {
+router.get("/getQuestions", authentication, async (req, res) => {
   try {
     const questions = await Question.find({ isDeleted: { $ne: true } }).sort(
       "name"

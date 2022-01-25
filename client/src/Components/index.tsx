@@ -6,6 +6,8 @@ import ModalBody from "./ModalBody";
 import Navbar from "./Navbar";
 import Placeholder from "./Placeholder";
 import NotFound from "./NotFound";
+import FormContainer from "./FormContainer";
+import ResultGraphs from "./ResultGraphs";
 
 export {
   Button,
@@ -16,4 +18,6 @@ export {
   ModalFooter,
   ModalHeader,
   NotFound,
+  FormContainer,
+  ResultGraphs,
 };

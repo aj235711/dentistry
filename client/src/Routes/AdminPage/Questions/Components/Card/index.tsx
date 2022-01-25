@@ -59,7 +59,7 @@ const Card: React.FC<IProps> = ({
               {questions.map((question) =>
                 question.category === category._id ? (
                   <div className="py-2 w-full flex flex-wrap justify-between items-center px-4 hover:bg-gray-100">
-                    <span className="w-3/4 md:w-11/12">{`${question.text} (Weightage :- ${question.weightage})`}</span>
+                    <span className="w-3/4 md:w-11/12">{`${question.text}`}</span>
                     <span className="w-1/4 md:w-1/12 flex flex-wrap justify-end items-center">
                       <Button
                         classes="mx-1 p-0"

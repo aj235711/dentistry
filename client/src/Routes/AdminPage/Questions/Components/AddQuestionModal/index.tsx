@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 
 import {
   Button,
@@ -26,11 +26,7 @@ const AddQuestionModal: React.FC<IProps> = ({
   editQuestion,
   categoryId,
 }) => {
-  const {
-    text: currText = "",
-    weightage: currWeightage = 1,
-    _id = "",
-  } = editQuestion || {};
+  const { text: currText = "", _id = "" } = editQuestion || {};
   const { state, setText, handleSubmit } = useData({
     onDone,
     toggle,
@@ -45,10 +41,9 @@ const AddQuestionModal: React.FC<IProps> = ({
       <Formik
         initialValues={{
           text,
-          weightage: currWeightage,
         }}
-        onSubmit={(values, _) => {
-          handleSubmit(values);
+        onSubmit={() => {
+          handleSubmit();
         }}
       >
         <Form>
@@ -69,23 +64,6 @@ const AddQuestionModal: React.FC<IProps> = ({
                 className="mt-1 block w-full py-2 px-3 border-2 border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-gray-800 focus:border-gray-800 sm:text-sm rounded-md"
                 onChange={(e) => setText(e.target.value)}
                 value={text}
-              />
-            </div>
-            <div className="my-1 w-full">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Weightage
-              </label>
-              <Field
-                required
-                type="number"
-                name="weightage"
-                id="weightage"
-                min={1}
-                placeholder="Question Weightage"
-                className="mt-1 block w-full py-2 px-3 border-2 border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-gray-800 focus:border-gray-800 sm:text-sm rounded-md"
               />
             </div>
           </ModalBody>
