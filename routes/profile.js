@@ -19,6 +19,7 @@ router.post("/createSubmission", authentication, async (req, res) => {
     const submission = new Submission({
       projectId: project._id,
       questions: req.body.questions,
+      userId: req.user._id,
     });
     const sub = await submission.save();
     res.json({ success: true, submissionId: sub._id });
@@ -109,10 +110,11 @@ router.get("/allProjects", authentication, async (req, res) => {
 });
 
 router.get("/allSubmissions", authentication, async (req, res) => {
+  const projectId = req.params.projectId;
+  const userId = req.user._id;
+  // const userId = mongoose.Types.ObjectId(req.user._id);
   try {
-    const submissions = await Submission.find({
-      projectId: req.body.projectId,
-    });
+    const submissions = Submission.find(projectId ? {projectId:projectId} : {userId:userId});
     res.json({ success: true, submissions });
   } catch (err) {
     console.log(err);
