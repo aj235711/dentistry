@@ -101,6 +101,7 @@ router.get("/allProjects", authentication, async (req, res) => {
           },
         },
       },
+      { $match: { userId: mongoose.Types.ObjectId(req.user._id) } },
     ]);
     res.json({ success: true, projects });
   } catch (err) {

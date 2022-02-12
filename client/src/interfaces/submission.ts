@@ -25,6 +25,7 @@ export interface IProject {
   submissions: string[];
   userId?: IUser;
   published?: boolean;
+  latest?: string;
 }
 
 export interface ISubmission {
