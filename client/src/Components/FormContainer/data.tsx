@@ -12,9 +12,10 @@ import { GET, POST } from "../../utils/axios";
 
 interface IParams {
   submissionId?: string;
+  forEdit?: boolean;
 }
 
-const useData = ({ submissionId }: IParams) => {
+const useData = ({ submissionId, forEdit }: IParams) => {
   const history = useHistory();
 
   const [questions, setQuestions] = React.useState<IQuestion[]>([]);
@@ -81,10 +82,15 @@ const useData = ({ submissionId }: IParams) => {
           return acc;
         }
       }, []);
-      const { data } = await POST("createSubmission", {
-        questions: qns,
-        projectName: values.projectName,
-      });
+
+      const { data } = await POST(
+        forEdit ? "editSubmission" : "createSubmission",
+        {
+          questions: qns,
+          projectName: values.projectName,
+          submissionId,
+        }
+      );
       toast.success("Submitted successfully");
       history.push(`/responses_and_results/${data.submissionId}`);
     } catch (err) {

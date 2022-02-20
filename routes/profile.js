@@ -28,6 +28,26 @@ router.post("/createSubmission", authentication, async (req, res) => {
   }
 });
 
+router.post("/editSubmission", authentication, async (req, res) => {
+  try {
+    const { submissionId, questions } = req.body;
+    await Submission.findByIdAndUpdate(submissionId, { questions });
+    res.json({ success: true, submissionId });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.post("/deleteSubmission", authentication, async (req, res) => {
+  try {
+    const { submissionId } = req.body;
+    await Submission.findByIdAndDelete(submissionId);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 router.put("/editProject", authentication, async (req, res) => {
   Project.updateOne(
     { _id: req.body.id },
@@ -101,6 +121,7 @@ router.get("/allProjects", authentication, async (req, res) => {
           },
         },
       },
+      { $match: { userId: mongoose.Types.ObjectId(req.user._id) } },
     ]);
     res.json({ success: true, projects });
   } catch (err) {
@@ -110,11 +131,13 @@ router.get("/allProjects", authentication, async (req, res) => {
 });
 
 router.get("/allSubmissions", authentication, async (req, res) => {
-  const projectId = req.params.projectId;
+  const projectId = req.query.projectId;
   const userId = req.user._id;
-  // const userId = mongoose.Types.ObjectId(req.user._id);
   try {
-    const submissions = Submission.find(projectId ? {projectId:projectId} : {userId:userId});
+    const submissions = await Submission.find({
+      userId,
+      ...(!!projectId && { projectId }),
+    }).populate("projectId");
     res.json({ success: true, submissions });
   } catch (err) {
     console.log(err);

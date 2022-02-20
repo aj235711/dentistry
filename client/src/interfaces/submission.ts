@@ -25,10 +25,13 @@ export interface IProject {
   submissions: string[];
   userId?: IUser;
   published?: boolean;
+  latest?: string;
 }
 
 export interface ISubmission {
   questions: IQns[];
   createdAt?: Date;
   projectId?: IProject | string;
+  _id?: string;
+  createdOn?: string;
 }
