@@ -32,4 +32,6 @@ export interface ISubmission {
   questions: IQns[];
   createdAt?: Date;
   projectId?: IProject | string;
+  _id?: string;
+  createdOn?: string;
 }

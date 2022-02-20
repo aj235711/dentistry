@@ -1,37 +1,44 @@
 import * as React from "react";
 import { toast } from "react-toastify";
 
-import { IProject } from "../../interfaces/submission";
+import { ISubmission } from "../../interfaces/submission";
 import { GET } from "../../utils/axios";
 
 const useData = () => {
-  const [projects, setProjects] = React.useState<IProject[]>([]);
-  const [getProjectsLoading, setGetProjectsLoading] =
+  const [submissions, setSubmissions] = React.useState<ISubmission[]>([]);
+  const [getSubmissionsLoading, setGetSubmissionsLoading] =
+    React.useState<boolean>(false);
+  const [isDeleteSubmissionModalVisible, setDeleteSubmissionModalVisible] =
     React.useState<boolean>(false);
 
   const state = {
-    projects,
-    getProjectsLoading,
+    submissions,
+    getSubmissionsLoading,
+    isDeleteSubmissionModalVisible,
   };
 
-  const getProjects = async () => {
+  const toggleDeleteSubmissionModal = () => {
+    setDeleteSubmissionModalVisible(!isDeleteSubmissionModalVisible);
+  };
+
+  const getSubmissions = async () => {
     try {
-      setGetProjectsLoading(true);
-      const { data } = await GET("allProjects");
-      setProjects(data.projects);
+      setGetSubmissionsLoading(true);
+      const { data } = await GET("allSubmissions");
+      setSubmissions(data.submissions);
     } catch (err) {
       console.error(err);
-      toast.error("Unable to fetch your projects");
+      toast.error("Unable to fetch your submissions");
     } finally {
-      setGetProjectsLoading(false);
+      setGetSubmissionsLoading(false);
     }
   };
 
   React.useEffect(() => {
-    getProjects();
+    getSubmissions();
   }, []);
 
-  return { state };
+  return { state, toggleDeleteSubmissionModal, getSubmissions };
 };
 
 export default useData;

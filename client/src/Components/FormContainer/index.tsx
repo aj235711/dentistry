@@ -14,8 +14,9 @@ interface IProps {
 const SubmissionForm: React.FC<IProps> = ({
   submissionId,
   forResponses = false,
+  forEdit,
 }) => {
-  const { state, handleSubmit } = useData({ submissionId });
+  const { state, handleSubmit } = useData({ submissionId, forEdit });
 
   const {
     questions,
@@ -67,7 +68,7 @@ const SubmissionForm: React.FC<IProps> = ({
                 id="projectName"
                 placeholder="Enter the name of project"
                 className="w-full md:w-1/4 mt-1 block py-2 px-3 border-b-2 border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
-                disabled={forResponses}
+                disabled={forResponses || forEdit}
               />
             </div>
             {categories.map((category) => (
