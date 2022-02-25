@@ -27,6 +27,8 @@ const sendOtp = async (toEmail, otp, res) => {
       auth: {
         user: process.env.mail1,
         pass: process.env.pass1,
+      },tls: {
+        ciphers: "SSLv3",
       },
     })
   );
