@@ -1,173 +1,268 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("passport");
-const User = mongoose.model("User");
 const Submission = mongoose.model("Submission");
 const Project = mongoose.model("Project");
+const authentication = require("../middlewares/authentication");
 
 const router = express.Router();
 
-// router.post(
-//   "/createProject",
-//   passport.authenticate("jwt", { session: false }),
-//   async (req, res) => {
-//     try {
-//       const project = new Project({
-//         projectName: req.body.projectName,
-//         userId: req.user._id,
-//       });
-//       // if(!Project.findOne({projectName: project.projectName})){
-//       const p = await project.save();
-//       const submission = new Submission({
-//         projectId: p._id,
-//         introduction: req.body.introduction,
-//         methodology: req.body.methodology,
-//         results: req.body.results,
-//         discussion: req.body.discussion,
-//         conclusion: req.body.conslusion,
-//         abstract: req.body.abstract,
-//         references: req.body.references,
-//         generalWriting: req.body.generalWriting,
-//         total: req.body.total,
-//       });
-//       await submission.save();
-//       res.json({ success: true });
-//       // } else{
-//       //   res.json({success: false, message: "Project already exists"});
-//       // }
-//     } catch (err) {
-//       console.log(err);
-//       res.status(500).json({ success: false, err: err.message });
-//     }
-//   }
-// );
-
-router.post(
-  "/createSubmission",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    try {
-      let project = await Project.findById(req.body.projectId);
-      // project.catch(err => res.json({error: err.message}));
-      if (!project) {
-        project = await new Project({
-          projectName: req.body.projectName,
-          userId: req.user._id,
-        }).save();
-      }
-      const submission = new Submission({
-        projectId: project._id,
-        questions: req.body.questions, //[{1, "",},{}]
-      });
-      await submission.save();
-      res.json({ success: true });
-    } catch (err) {
-      res.json({ success: false, error: err.message });
+router.post("/createSubmission", authentication, async (req, res) => {
+  try {
+    let project = await Project.findById(req.body.projectId);
+    if (!project) {
+      project = await new Project({
+        name: req.body.projectName,
+        userId: req.user._id,
+      }).save();
     }
+    const submission = new Submission({
+      projectId: project._id,
+      questions: req.body.questions,
+      userId: req.user._id,
+    });
+    const sub = await submission.save();
+    res.json({ success: true, submissionId: sub._id });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
   }
-);
+});
 
-router.put("editSubmission", passport.authenticate("jwt",{session:false}),
-async (req, res) => {
-  Submission.updateOne(
-    { _id:req.body.id},
-    {questions:req.query.questions},
+router.post("/editSubmission", authentication, async (req, res) => {
+  try {
+    const { submissionId, questions } = req.body;
+    await Submission.findByIdAndUpdate(submissionId, { questions });
+    res.json({ success: true, submissionId });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.post("/deleteSubmission", authentication, async (req, res) => {
+  try {
+    const { submissionId } = req.body;
+    await Submission.findByIdAndDelete(submissionId);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.put("/editProject", authentication, async (req, res) => {
+  Project.updateOne(
+    { _id: req.body.id },
+    { projectName: req.body.projectName, published: req.body.published },
     async (err, numAffected) => {
-      if(err){
+      if (err) {
         console.log(err);
-        res.json({success: false});
+        res.json({ success: false });
       }
     }
   );
-  res.json({success: true});
-})
+  res.json({ success: true });
+});
 
-router.put(
-  "/editProject",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    Project.updateOne(
-      { _id: req.body.id },
-      { projectName: req.body.projectName, published: req.body.published },
-      async (err, numAffected) => {
-        if (err) {
-          console.log(err);
-          res.json({ success: false });
-        }
-      }
-    );
-    // await project.save();
-    res.json({ success: true });
-  }
-);
+router.delete("/delete/submission", authentication, async (req, res) => {
+  Submission.deleteOne({ _id: req.query.id }, (err) => {
+    if (err) {
+      console.log(err);
+      res.json({ success: false });
+    }
+  });
+  res.json({ success: true });
+});
 
-router.delete(
-  "/delete/submission",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    Submission.deleteOne({ _id: req.query.id }, (err) => {
+router.delete("/delete/project", authentication, async (req, res) => {
+  const project = await Project.findOne({ _id: req.query.id });
+  if (project) {
+    Submission.deleteMany({ projectId: req.query.id }, (err) => {
       if (err) {
         console.log(err);
         res.json({ success: false });
       }
     });
-    res.json({ success: true });
+    Project.deleteOne({ _id: req.query.id }, (err) => {
+      if (err) {
+        console.log(err);
+        res.json({ success: false });
+      }
+    });
+  } else {
+    res.json({ success: false, message: "no such project" });
   }
-);
+  res.json({ success: true });
+});
 
-router.delete(
-  "/delete/project",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    const project = await Project.findOne({ _id: req.query.id });
-    if (project) {
-      Submission.deleteMany({ projectId: req.query.id }, (err) => {
-        if (err) {
-          console.log(err);
-          res.json({ success: false });
-        }
-      });
-      Project.deleteOne({ _id: req.query.id }, (err) => {
-        if (err) {
-          console.log(err);
-          res.json({ success: false });
-        }
-      });
-    } else {
-      res.json({ success: false, message: "no such project" });
-    }
-    res.json({ success: true });
+router.get("/allProjects", authentication, async (req, res) => {
+  try {
+    const projects = await Submission.aggregate([
+      { $sort: { createdAt: -1 } },
+      {
+        $group: {
+          _id: "$projectId",
+          submissions: {
+            $addToSet: "$_id",
+          },
+          latest: { $first: "$createdAt" },
+        },
+      },
+      {
+        $lookup: {
+          from: "projects",
+          localField: "_id",
+          foreignField: "_id",
+          as: "project",
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [{ $arrayElemAt: ["$project", 0] }, "$$ROOT"],
+          },
+        },
+      },
+      { $match: { userId: mongoose.Types.ObjectId(req.user._id) } },
+    ]);
+    res.json({ success: true, projects });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, err: err.message });
   }
-);
+});
 
-router.get(
-  "/allProjects",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    try {
-      const projects = await Project.find({ userId: req.user._id });
-      res.json({ success: true, projects });
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ success: false, err: err.message });
-    }
+router.get("/allSubmissions", authentication, async (req, res) => {
+  const projectId = req.query.projectId;
+  const userId = req.user._id;
+  try {
+    const submissions = await Submission.find({
+      userId,
+      ...(!!projectId && { projectId }),
+    }).populate("projectId");
+    res.json({ success: true, submissions });
+  } catch (err) {
+    console.log(err);
+    res.json({ success: false });
   }
-);
+});
 
-router.get(
-  "/allSubmissions",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    try {
-      const submissions = await Submission.find({
-        projectId: req.body.projectId,
-      });
-      res.json({ success: true, submissions });
-    } catch (err) {
-      console.log(err);
-      res.json({ success: false });
-    }
+router.get("/oneSubmission", authentication, async (req, res) => {
+  try {
+    const submission = await Submission.findOne({
+      _id: req.query.submissionId,
+    }).populate("projectId");
+    res.json({ success: true, submission });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false });
   }
-);
+});
+
+router.get("/submissionResults", authentication, async (req, res) => {
+  try {
+    const results = await Submission.aggregate([
+      {
+        $match: {
+          _id: mongoose.Types.ObjectId(req.query.submissionId),
+        },
+      },
+      {
+        $lookup: {
+          from: "questions",
+          localField: "questions.questionId",
+          foreignField: "_id",
+          as: "foreignQues",
+        },
+      },
+      {
+        $unwind: {
+          path: "$foreignQues",
+        },
+      },
+      {
+        $unwind: {
+          path: "$questions",
+        },
+      },
+      {
+        $redact: {
+          $cond: [
+            {
+              $eq: ["$questions.questionId", "$foreignQues._id"],
+            },
+            "$$KEEP",
+            "$$PRUNE",
+          ],
+        },
+      },
+      {
+        $group: {
+          _id: "$foreignQues.category",
+          total: {
+            $sum: 1,
+          },
+          yes: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: ["$questions.response", "YES"],
+                },
+                then: 1,
+                else: 0,
+              },
+            },
+          },
+          no: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: ["$questions.response", "NO"],
+                },
+                then: 1,
+                else: 0,
+              },
+            },
+          },
+          na: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: ["$questions.response", "N/A"],
+                },
+                then: 1,
+                else: 0,
+              },
+            },
+          },
+          catId: {
+            $first: "$foreignQues.category",
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "catId",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $unwind: {
+          path: "$category",
+        },
+      },
+      {
+        $sort: {
+          "category.displayOrder": 1,
+        },
+      },
+    ]);
+
+    res.json({ results });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json("internal server error");
+  }
+});
 
 module.exports = router;

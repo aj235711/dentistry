@@ -26,10 +26,12 @@ const AddCategoryModal: React.FC<IProps> = ({
 }) => {
   const {
     name: currName = "",
-    weightage: currWeightage = 1,
     description: currDescription = "",
     _id = "",
+    displayOrder: currDisplayOrder = 0,
+    showNa: currShowNa = "YES",
   } = editCategory || {};
+  console.log(currShowNa);
   const { state, setDescription, handleSubmit } = useData({
     onDone,
     toggle,
@@ -44,15 +46,18 @@ const AddCategoryModal: React.FC<IProps> = ({
         initialValues={{
           name: currName,
           description,
-          weightage: currWeightage,
+          displayOrder: currDisplayOrder,
+          showNa: currShowNa,
         }}
         onSubmit={(values, _) => {
           handleSubmit(values);
         }}
       >
         <Form>
-          <ModalHeader toggle={toggle}>Add Category</ModalHeader>
-          <ModalBody classes="bg-white pb-4">
+          <ModalHeader toggle={toggle}>
+            {!editCategory ? "Add Category" : "Edit Category"}
+          </ModalHeader>
+          <ModalBody classes="bg-white pb-4 px-5">
             <div className="grid md:grid-cols-2 md:gap-4">
               <div className="my-1">
                 <label
@@ -72,20 +77,39 @@ const AddCategoryModal: React.FC<IProps> = ({
               </div>
               <div className="my-1">
                 <label
-                  htmlFor="password"
+                  htmlFor="displayOrder"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Weightage
+                  Display Order
                 </label>
                 <Field
                   required
                   type="number"
-                  name="weightage"
-                  id="weightage"
-                  min={1}
-                  placeholder="Category Weightage"
+                  name="displayOrder"
+                  id="displayOrder"
+                  placeholder="Display Order"
                   className="mt-1 block w-full py-2 px-3 border-2 border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-gray-800 focus:border-gray-800 sm:text-sm rounded-md"
                 />
+              </div>
+            </div>
+            <div className="grid md:grid-cols-2 md:gap-4">
+              <div className="my-3">
+                <label
+                  id="showNa"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Show N/A Option
+                </label>
+                <div role="group" aria-labelledby="showNa">
+                  <label className="pr-2">
+                    <Field type="radio" name="showNa" value="YES" />
+                    Yes
+                  </label>
+                  <label className="px-2">
+                    <Field type="radio" name="showNa" value="NO" />
+                    No
+                  </label>
+                </div>
               </div>
             </div>
             <div className="my-2">
@@ -109,11 +133,9 @@ const AddCategoryModal: React.FC<IProps> = ({
           <ModalFooter classes="py-3 flex justify-end items-center px-3">
             <Button
               classes="px-3 py-1 text-xs mx-1"
-              // bgc="gray-500"
               bgch="white"
               colorh="black"
               outline={false}
-              // color="white"
               rounded="sm"
               disabled={saveCategoryLoading}
               onClick={toggle}
@@ -123,10 +145,6 @@ const AddCategoryModal: React.FC<IProps> = ({
             <Button
               classes="pr-3 pl-2 py-1 text-xs mx-1"
               type="submit"
-              // bgc="green-500"
-              // bgch="green-700"
-              // outline={false}
-              // color="white"
               rounded="sm"
               loading={saveCategoryLoading}
             >

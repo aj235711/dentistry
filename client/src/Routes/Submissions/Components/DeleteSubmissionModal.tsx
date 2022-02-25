@@ -1,22 +1,38 @@
 import * as React from "react";
+import { toast } from "react-toastify";
 
-import { Modal, ModalBody, Button } from "../../../../../Components";
-import useData from "./data";
+import { Modal, ModalBody, Button } from "../../../Components";
+import { POST } from "../../../utils/axios";
 
 interface IProps {
   isOpen: boolean;
   toggle: () => void;
   onDone: () => void;
-  _id: string;
+  submissionId: string;
 }
 
-const DeleteCategoryModal: React.FC<IProps> = ({
+const DeleteSubmissionModal: React.FC<IProps> = ({
   isOpen,
   toggle,
   onDone,
-  _id,
+  submissionId,
 }) => {
-  const { loading, deleteCategory } = useData({ _id, toggle, onDone });
+  const [loading, setLoading] = React.useState<boolean>(false);
+
+  const deleteSubmission = async () => {
+    try {
+      setLoading(true);
+      await POST("deleteSubmission", { submissionId });
+      toast.success("Submission deleted successfully");
+      onDone();
+      toggle();
+    } catch (err) {
+      toast.error("Unexpected error occured");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Modal>
       <ModalBody classes="flex flex-wrap justify-center items-center bg-white rounded-md">
@@ -34,7 +50,7 @@ const DeleteCategoryModal: React.FC<IProps> = ({
           </Button>
           <Button
             loading={loading}
-            onClick={deleteCategory}
+            onClick={deleteSubmission}
             classes="mx-1 px-3 py-1"
             rounded="md"
           >
@@ -46,4 +62,4 @@ const DeleteCategoryModal: React.FC<IProps> = ({
   );
 };
 
-export default DeleteCategoryModal;
+export default DeleteSubmissionModal;

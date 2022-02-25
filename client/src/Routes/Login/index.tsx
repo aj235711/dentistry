@@ -11,12 +11,12 @@ const LoginForm: React.FC = () => {
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-gradient-to-tr from-gray-100 to-gray-400">
       <div className="w-11/12 md:w-1/4 pb-8 shadow-md bg-white rounded">
-        <div className="text-2xl text-center px-8 py-4 mb-3 text-white bg-gradient-to-br from-gray-700 to-gray-900 mb-6">
+        <div className="text-2xl text-center px-8 py-4 text-white bg-gradient-to-br from-gray-700 to-gray-900 mb-6">
           Login to continue
         </div>
         <Formik
           initialValues={{ email: "", password: "" }}
-          onSubmit={(values, actions) => handleSubmit(values)}
+          onSubmit={(values) => handleSubmit(values)}
         >
           <Form className="px-8">
             <div className="my-4">

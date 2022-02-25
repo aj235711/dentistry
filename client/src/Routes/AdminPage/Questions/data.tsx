@@ -39,28 +39,20 @@ const useData = () => {
   };
 
   const getCategories = async () => {
-    const { data } = await axios.post(
-      `${serverLink}/getCategories`,
-      {},
-      {
-        headers: {
-          Authorization: localStorage.getItem("jwtToken"),
-        },
-      }
-    );
+    const { data } = await axios.get(`${serverLink}/getCategories`, {
+      headers: {
+        Authorization: localStorage.getItem("jwtToken"),
+      },
+    });
     setCategories(data.categories);
   };
 
   const getQuestions = async () => {
-    const { data } = await axios.post(
-      `${serverLink}/getQuestions`,
-      {},
-      {
-        headers: {
-          Authorization: localStorage.getItem("jwtToken"),
-        },
-      }
-    );
+    const { data } = await axios.get(`${serverLink}/getQuestions`, {
+      headers: {
+        Authorization: localStorage.getItem("jwtToken"),
+      },
+    });
     setQuestions(data.questions);
   };
 

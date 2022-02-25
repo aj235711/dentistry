@@ -8,13 +8,26 @@ import Categories from "./AdminPage/Categories";
 import Questions from "./AdminPage/Questions";
 import Otp from "./Otp";
 import SubmissionForm from "./SubmissionForm";
+import ResponsesAndResults from "./ResponsesAndResults";
+import Projects from "./Projects";
+import Submissions from "./Submissions";
+import EditSubmission from "./EditSubmission";
 import { NotFound } from "../Components";
 
 const Routes: React.FC = () => {
   return (
     <Router>
       <Route
-        path={["/", "/categories", "/questions", "/make_submission"]}
+        path={[
+          "/",
+          "/categories",
+          "/questions",
+          "/make_submission",
+          "/responses_and_results/:submissionId",
+          "/myprojects",
+          "/mysubmissions",
+          "/edit_submission/:submissionId",
+        ]}
         exact
         component={Navbar}
       />
@@ -25,6 +38,18 @@ const Routes: React.FC = () => {
         <Route path="/categories" exact component={Categories} />
         <Route path="/questions" exact component={Questions} />
         <Route path="/make_submission" exact component={SubmissionForm} />
+        <Route
+          path="/edit_submission/:submissionId"
+          exact
+          component={EditSubmission}
+        />
+        <Route
+          path="/responses_and_results/:submissionId"
+          exact
+          component={ResponsesAndResults}
+        />
+        <Route path="/myprojects" exact component={Projects} />
+        <Route path="/mysubmissions" exact component={Submissions} />
         <Route exact path="*" component={NotFound} />
       </Switch>
     </Router>
